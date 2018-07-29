@@ -473,6 +473,10 @@ namespace AppPonto
             }
         }
 
+        /// <summary>
+        /// Chama a função para abertura da tela de
+        /// cadastro de lembrete
+        /// </summary>
         private void Lembrete()
         {
             object objItem = grvPonto.Rows[grvPonto.CurrentRow.Index].DataBoundItem;
@@ -643,6 +647,10 @@ namespace AppPonto
             #endregion
         }
 
+        /// <summary>
+        /// Chama o form frmrelatorio para gerar o 
+        /// relatório do selecionado pelo usuário.
+        /// </summary>
         private void ExecutaRelatorio()
         {
             frmRelatorio FrmRelatorio = new frmRelatorio();

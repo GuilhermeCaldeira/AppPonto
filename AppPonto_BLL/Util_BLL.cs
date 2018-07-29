@@ -195,6 +195,11 @@ namespace AppPonto_BLL
             return Retorno;
         }
 
+        public static string RetornaNomeArquivo(int Ano, int Mes)
+        {
+            return (Ano.ToString() + "_" + Mes.ToString("00")).ToUpper() + ".xml";
+        }
+
         #endregion
     }
 }

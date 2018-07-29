@@ -30,14 +30,17 @@ namespace AppPonto_DAL
             XmlSerializer ser = new XmlSerializer(typeof(Ponto[]));
             List<Ponto> ListPontos = new List<Ponto>();
 
-            using (XmlReader reader = XmlReader.Create(Caminho.CaminhoXML(NomeArquivo)))
+            if (File.Exists(Caminho.CaminhoXML(NomeArquivo)))
             {
-                foreach(Ponto Item in (Ponto[])ser.Deserialize(reader))
+                using (XmlReader reader = XmlReader.Create(Caminho.CaminhoXML(NomeArquivo)))
                 {
-                    Item.Ferias = Item.Ferias != 0 ? Item.Ferias : 'N';
-                    Item.Folga = Item.Folga != 0 ? Item.Folga : 'N';
+                    foreach (Ponto Item in (Ponto[])ser.Deserialize(reader))
+                    {
+                        Item.Ferias = Item.Ferias != 0 ? Item.Ferias : 'N';
+                        Item.Folga = Item.Folga != 0 ? Item.Folga : 'N';
 
-                    ListPontos.Add(Item);
+                        ListPontos.Add(Item);
+                    }
                 }
             }
 

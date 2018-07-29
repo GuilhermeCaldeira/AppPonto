@@ -16,10 +16,11 @@ namespace AppPonto_BLL
 
         public void CriarTabela()
         {
-            List<Ponto> ListPonto = new List<Ponto>();
-
             DateTime MesInicio = Convert.ToDateTime("01/" + DateTime.Now.ToString("MM/yyyy"));
             DateTime MesFim = Convert.ToDateTime(MesInicio.AddMonths(1).AddSeconds(-1).ToString("dd/MM/yyyy"));
+
+            List<Ponto> ListPonto = new List<Ponto>();
+            List<int> DiasFeriados = RetornaFeriados(MesFim);
 
             for (int i = 1; i <= MesFim.Day; i++)
             {
@@ -28,7 +29,7 @@ namespace AppPonto_BLL
                 Ponto ItemPonto = new Ponto();
                 ItemPonto.Data = Dia;
                 ItemPonto.DiaSemana = Util_BLL.RetornaDiaSemana(Dia.DayOfWeek);
-                ItemPonto.Feriado = 'N';
+                ItemPonto.Feriado = DiasFeriados.Contains(Dia.Day) ? 'S' : 'N';
                 ItemPonto.Ferias = 'N';
                 ItemPonto.Folga = 'N';
 
@@ -171,6 +172,29 @@ namespace AppPonto_BLL
             }
 
             return (new TimeSpan(ValorTotal));
+        }
+
+        #endregion
+
+        #region "Métodos Gerais"
+
+        /// <summary>
+        /// Função retorna quais dias foram definidos como 
+        /// feriados baseados em dados histórico.
+        /// </summary>
+        /// <param name="DataReferencia">Qualquer data feredia ao mês de criação do arquivo atual</param>
+        /// <returns></returns>
+        private List<int> RetornaFeriados(DateTime DataReferencia)
+        {
+            List<int> DiasFeriados = new List<int>();
+            List<Ponto> ListPontoAnoAnterior = CarregaRegistro(Util_BLL.RetornaNomeArquivo(DataReferencia.Year - 1, DataReferencia.Month));
+
+            foreach (Ponto ItemPonto in ListPontoAnoAnterior.Where(p => ((Ponto)p).Feriado == 'S').ToList<Ponto>())
+            {
+                DiasFeriados.Add(ItemPonto.Data.Day);
+            }
+
+            return DiasFeriados;
         }
 
         #endregion
